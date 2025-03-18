@@ -7,11 +7,16 @@
 </head>
 <body>
     <h1>Book List Page</h1>
-    <ol>
-        {% for book in books %}
-            <a href="{% url 'books:detail' book.id %}"><li>{{book.title}}</li></a>
-            <br>
-        {% endfor %}
-    </ol>
+    {% if books %}
+        <ol>
+            {% for book in books %}
+                <a href="{% url 'books:detail' book.id %}"><li>{{book.title}}</li></a>
+                <br>
+            {% endfor %}
+        </ol>
+    {% else %}
+    No books found.
+
+    {% endif %}
 </body>
 </html>

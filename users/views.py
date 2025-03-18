@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.views import View
 from django.contrib.auth.models import User
 from .forms import UserCreateForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
@@ -45,4 +46,11 @@ class LoginView(View):
             'form':login_form
         }
         return render(request,'users/login.html',context)
+    
+class ProfileView(LoginRequiredMixin,View):
+    def get(self,request):
+        context = {
+            'user':request.user
+        }
+        return render(request,'users/profile.html',context)
 
