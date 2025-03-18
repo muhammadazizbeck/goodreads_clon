@@ -23,7 +23,6 @@ class RegistrationTestCase(TestCase):
         self.assertNotEqual(user.password,'Azizbek1410')
         self.assertTrue(user.check_password('Azizbek1410'))
 
-
     def test_required_fields(self):
         """Agar username va password bo‘lmasa, forma xato bo‘lishi kerak"""
         response = self.client.post(
@@ -116,11 +115,12 @@ class RegistrationTestCase(TestCase):
 
 class LoginTestCase(TestCase):
 
-    def test_successful_login(self):
-        user = User.objects.create(username='tester0',password='Azizbek1410')
-        user.set_password("Azizbek1410")
-        user.save()
+    def setUp(self):
+        self.user = User.objects.create(username='tester0',password='Azizbek1410')
+        self.user.set_password("Azizbek1410")
+        self.user.save()     
 
+    def test_successful_login(self):
         self.client.post(
             reverse('users:login'),
             data = {
@@ -133,10 +133,6 @@ class LoginTestCase(TestCase):
         self.assertTrue(success_user.is_authenticated)
 
     def test_wrong_credentials(self):
-        user = User.objects.create(username='tester0',password='Azizbek1410')
-        user.set_password('Azizbek1410')
-        user.save()
-
         self.client.post(
             reverse('users:login'),
             data = {
@@ -193,3 +189,17 @@ class ProfileTestCase(TestCase):
         self.assertEqual(response.status_code,200)
 
     
+class LogoutTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create(username='tester0',password='Azizbek1410')
+        self.user.set_password('Azizbek1410')
+        self.user.save()
+
+    def test_logout(self):
+        self.client.login(username='tester0',password='Azizbek1410')
+
+        self.client.get(reverse('users:logout'))
+
+        vt_user = get_user(self.client)
+
+        self.assertFalse(vt_user.is_authenticated)

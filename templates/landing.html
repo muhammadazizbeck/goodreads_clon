@@ -8,7 +8,20 @@
 <body>
     <h1>Langing Page</h1>
 
-    <p><a href="{% url 'users:register' %}">Register</a>   /    <a href="{% url 'users:login' %}">Login</a></p>
+    {% if messages %}
+        {% for message in messages %}
+
+            {{message}}
+
+        {%  endfor %}
+    {% endif %}
+    <p>
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'users:register' %}">Register</a>   /    <a href="{% url 'users:logout' %}">Logout</a>
+        {% else %}
+        <a href="{% url 'users:register' %}">Register</a>   /    <a href="{% url 'users:login' %}">Login</a>
+        {% endif %}
+    </p>
     <hr>
     <p><a href="{% url 'books:list' %}">Books</a>       /     <a href="{% url 'users:profile' %}">Profile</a></p>
     

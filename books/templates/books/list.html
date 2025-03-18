@@ -7,6 +7,16 @@
 </head>
 <body>
     <h1>Book List Page</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+
+            {{message}}
+
+        {% endfor %}
+
+    {% endif %}
+
     {% if books %}
         <ol>
             {% for book in books %}
