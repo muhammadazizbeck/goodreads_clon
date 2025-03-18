@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.contrib.auth import get_user
 
 # Create your tests here.
 
@@ -111,3 +112,67 @@ class RegistrationTestCase(TestCase):
 
         # Foydalanuvchilar soni 1 bo‘lishi kerak, chunki ikkinchi urinish muvaffaqiyatsiz bo‘lishi kerak
         self.assertEqual(User.objects.filter(username='tester0').count(), 1)
+
+
+class LoginTestCase(TestCase):
+
+    def test_successful_login(self):
+        user = User.objects.create(username='tester0',password='Azizbek1410')
+        user.set_password("Azizbek1410")
+        user.save()
+
+        self.client.post(
+            reverse('users:login'),
+            data = {
+                "username":"tester0",
+                "password":'Azizbek1410'
+            }
+        )
+
+        success_user = get_user(self.client)
+        self.assertTrue(success_user.is_authenticated)
+
+    def test_wrong_credentials(self):
+        user = User.objects.create(username='tester0',password='Azizbek1410')
+        user.set_password('Azizbek1410')
+        user.save()
+
+        self.client.post(
+            reverse('users:login'),
+            data = {
+                'username':'wrong-username',
+                'password':'Azizbek1410',
+            }
+        )
+
+        invalid_user = get_user(self.client)
+        self.assertFalse(invalid_user.is_authenticated)
+
+        self.client.post(
+            reverse('users:login'),
+            data={
+                'username':"tester0",
+                'password':'wrong-password'
+            }
+        )
+
+        invalid_user2 = get_user(self.client)
+        self.assertFalse(invalid_user2.is_authenticated)
+
+        self.client.post(
+            reverse('users:login'),
+            data={
+                'username':"wrong-username",
+                'password':'wrong-password'
+            }
+        )
+
+        invalid_user3 = get_user(self.client)
+        
+        self.assertFalse(invalid_user3.is_authenticated)
+
+
+
+
+
+    
