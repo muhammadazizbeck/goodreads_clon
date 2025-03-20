@@ -1,21 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book List Page</title>
-</head>
-<body>
-    <h1>Book List Page</h1>
+{% extends 'base.html' %}
 
-    {% if messages %}
-        {% for message in messages %}
-
-            {{message}}
-
-        {% endfor %}
-
-    {% endif %}
+{% block content %}
+<h1>Book List</h1>
 
     {% if books %}
         <ol>
@@ -28,5 +14,5 @@
     No books found.
 
     {% endif %}
-</body>
-</html>
+
+{% endblock %}
