@@ -2,17 +2,29 @@
 
 {% block content %}
 
-    <h1>Profile Page</h1>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow-lg p-4 text-center" style="max-width: 400px; width: 100%;">
+        <h2 class="mb-3">My Profile</h2>
 
-    <div>
-        <img class="profile-picture" src="{{user.profile_picture.url}}" alt="Profile Pictur">
+        <div class="mb-3">
+            {% if user.profile_picture %}
+                <img class="rounded-circle border" src="{{ user.profile_picture.url }}" 
+                     alt="Profile Picture" style="width: 150px; height: 150px; object-fit: cover;">
+            {% else %}
+                <img class="rounded-circle border" src="https://via.placeholder.com/150" 
+                     alt="Default Profile Picture" style="width: 150px; height: 150px; object-fit: cover;">
+            {% endif %}
+        </div>
+
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Full Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+        <p><strong>Email Address:</strong> {{ user.email }}</p>
+        <p><strong>Member Since:</strong> {{ user.date_joined | date:"F d, Y" }}</p>
+
+        <a class="btn btn-primary mt-3 px-4" href="{% url 'users:profile-update' %}">Edit Profile</a>
     </div>
-
-    <a class="btn-primary" href="{% url 'users:profile-update' %}">Update Profile</a>
-
-    <h4>Username:{{user.username}}</h4>
-    <h4>First Name:{{user.first_name}}</h4>
-    <h4>Last Name:{{user.last_name}}</h4>
-    <h4>Email:{{user.email}}</h4>
+</div>
 
 {% endblock %}
+
+

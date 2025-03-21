@@ -1,18 +1,84 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Book List</h1>
+<div class="container mt-4">
+    <h2 class="text-center mb-4">📚 Book Collection</h2>
 
-    {% if books %}
-        <ol>
-            {% for book in books %}
-                <a href="{% url 'books:detail' book.id %}"><li>{{book.title}}</li></a>
-                <br>
+    <div class="container mb-4" >
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search"  name="q" value="{{search_query}}">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                  </form>
+            </div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+
+    {% if page_obj %}
+        <div class="row">
+            {% for book in page_obj %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <img src="{{ book.cover_image.url }}" class="card-img-top" 
+                             alt="{{ book.title }}" style="height: 250px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{% url 'books:detail' book.id %}" class="text-decoration-none text-dark">
+                                    {{ book.title }}
+                                </a>
+                            </h5>
+                            <p class="card-text text-muted">
+                                {{ book.description|truncatewords:20 }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
-        </ol>
+        </div>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              {% if page_obj.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo; Previous</span>
+                  </a>
+                </li>
+              {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&laquo; Previous</a>
+                </li>
+              {% endif %}
+          
+              {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                  <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+              {% endfor %}
+          
+              {% if page_obj.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">Next &raquo;</span>
+                  </a>
+                </li>
+              {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next &raquo;</a>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+          
     {% else %}
-    No books found.
-
+        <div class="alert alert-warning text-center">
+            No books found. 📖
+        </div>
     {% endif %}
-
+</div>
 {% endblock %}
+
+

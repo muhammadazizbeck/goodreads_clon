@@ -2,11 +2,23 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-    <h1>Login Page</h1>
-    <form action="" method="post">
-        {% csrf_token %}
-        {{form|crispy}}
-        <button class="btn btn-primary" type="submit">Log In</button>
-    </form>
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4 shadow-lg" style="max-width: 400px; width: 100%;">
+        <h2 class="text-center mb-3">Login</h2>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="btn btn-primary w-100 mt-3" type="submit">Log In</button>
+            <div class="text-center mt-2">
+                <a href="#">Forgot password?</a>
+            </div>
+            <div class="text-center mt-3">
+                <span>Don't have an account?</span>
+                <a class="btn btn-outline-secondary w-100 mt-2" href="{% url 'users:register' %}">Register</a>
+            </div>
+        </form>
+    </div>
+</div>
 
 {% endblock %}
+
