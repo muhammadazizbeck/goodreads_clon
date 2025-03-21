@@ -4,6 +4,12 @@
 
     <h1>Profile Page</h1>
 
+    <div>
+        <img class="profile-picture" src="{{user.profile_picture.url}}" alt="Profile Pictur">
+    </div>
+
+    <a class="btn-primary" href="{% url 'users:profile-update' %}">Update Profile</a>
+
     <h4>Username:{{user.username}}</h4>
     <h4>First Name:{{user.first_name}}</h4>
     <h4>Last Name:{{user.last_name}}</h4>

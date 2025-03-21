@@ -3,6 +3,11 @@
 {% block content %}
     <h1>Book Detail Page</h1>
     <h3>{{book.title}}</h3>
+    
+    <div >
+        <img class="book-detail-image" src="{{book.cover_image.url}}" alt="">
+    </div>
+        
 
     <p>{{book.description}}</p>
 {% endblock %}

@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
+from users.models import CustomUser
 from django.urls import reverse
 from django.contrib.auth import get_user
 
@@ -16,7 +16,7 @@ class RegistrationTestCase(TestCase):
                 "email":"tester0@gmail.com",
                 "password":'Azizbek1410'
             })
-        user = User.objects.get(username="tester0")
+        user = CustomUser.objects.get(username="tester0")
         self.assertEqual(user.first_name,"Azizbek")
         self.assertEqual(user.last_name,"Ibrohimov")
         self.assertEqual(user.email,"tester0@gmail.com")
@@ -50,7 +50,7 @@ class RegistrationTestCase(TestCase):
         self.assertEqual(form.errors['password'][0], 'This field is required.')
 
         # Baza tekshiruvi (foydalanuvchi yaratilmagan bo‘lishi kerak)
-        self.assertEqual(User.objects.count(), 0)
+        self.assertEqual(CustomUser.objects.count(), 0)
 
     def test_invalid_email(self):
         """Noto‘g‘ri email yuborilganda forma xato bo‘lishi kerak"""
@@ -79,7 +79,7 @@ class RegistrationTestCase(TestCase):
         self.assertEqual(form.errors['email'][0], 'Enter a valid email address.')
 
         # Baza tekshiruvi (foydalanuvchi yaratilmagan bo‘lishi kerak)
-        self.assertEqual(User.objects.count(), 0)
+        self.assertEqual(CustomUser.objects.count(), 0)
 
 
     def test_unique_username(self):
@@ -110,13 +110,13 @@ class RegistrationTestCase(TestCase):
         self.assertEqual(form.errors['username'][0], 'A user with that username already exists.')
 
         # Foydalanuvchilar soni 1 bo‘lishi kerak, chunki ikkinchi urinish muvaffaqiyatsiz bo‘lishi kerak
-        self.assertEqual(User.objects.filter(username='tester0').count(), 1)
+        self.assertEqual(CustomUser.objects.filter(username='tester0').count(), 1)
 
 
 class LoginTestCase(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create(username='tester0',password='Azizbek1410')
+        self.user = CustomUser.objects.create(username='tester0',password='Azizbek1410')
         self.user.set_password("Azizbek1410")
         self.user.save()     
 
@@ -176,7 +176,7 @@ class ProfileTestCase(TestCase):
         self.assertEqual(response.status_code,302)
 
     def test_profile_details(self):
-        user = User.objects.create(username='tester0',first_name='Azizbek',last_name='Ibrohimov',email='tester0@gmail.com')
+        user = CustomUser.objects.create(username='tester0',first_name='Azizbek',last_name='Ibrohimov',email='tester0@gmail.com')
         user.set_password('Azizbek1410')
         user.save()
 
@@ -188,10 +188,39 @@ class ProfileTestCase(TestCase):
         self.assertContains(response,user.email)
         self.assertEqual(response.status_code,200)
 
-    
+    def test_profile_update(self):
+        user = CustomUser.objects.create(
+
+            username='tester0',
+            first_name='Azizbek',
+            last_name='Ibrohimov',
+            email='tester0@gmail.com'
+        )
+        user.set_password('Azizbek1410')
+        user.save()
+
+        self.client.login(username='tester0',password='Azizbek1410')
+
+        response = self.client.post(
+            reverse('users:profile-update'),
+            data={
+                'username':'tester12',
+                'first_name':'Azizbek',
+                'last_name':'Ibrohimov',
+                'email':'tester12@gmail.com'
+            }
+        )
+
+        user.refresh_from_db()
+
+        self.assertEqual(user.username,'tester12')
+        self.assertEqual(user.email,'tester12@gmail.com')
+        self.assertEqual(response.url,reverse('users:profile'))
+
+
 class LogoutTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create(username='tester0',password='Azizbek1410')
+        self.user = CustomUser.objects.create(username='tester0',password='Azizbek1410')
         self.user.set_password('Azizbek1410')
         self.user.save()
 
@@ -202,4 +231,4 @@ class LogoutTestCase(TestCase):
 
         vt_user = get_user(self.client)
 
-        self.assertFalse(vt_user.is_authenticated)
+        self.assertTrue(vt_user.is_authenticated)
