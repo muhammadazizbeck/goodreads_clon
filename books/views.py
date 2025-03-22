@@ -1,8 +1,10 @@
-from django.shortcuts import render
-from .models import Book
+from django.shortcuts import render,redirect
+from .models import Book,BookReview
+from django.urls import reverse
 from django.db.models import Q
 from django.core.paginator import Paginator
 from django.views import View
+from .forms import BookReviewForm
 
 # Create your views here.
 
@@ -25,9 +27,29 @@ class BookListView(View):
 class BookDetailView(View):
     def get(self,request,id):
         book = Book.objects.get(id=id)
+        review_form = BookReviewForm()
         context = {
-            'book':book
+            'book':book,
+            'review_form':review_form
         }
         return render(request,'books/detail.html',context)
+    
+class AddReviewView(View):
+    def post(self,request,id):
+        book = Book.objects.get(id=id)
+        review_form = BookReviewForm(data=request.POST)
+        if review_form.is_valid():
+            BookReview.objects.create(
+                book = book,
+                user = request.user,
+                stars = review_form.cleaned_data['stars'],
+                comment = review_form.cleaned_data['comment']
+            )
+            return redirect(reverse('books:detail',kwargs={'id':book.id}))
+        else:
+            context = {
+                'review_form':review_form
+            }
+            return render(request,'books/detail.html',context)
     
 
