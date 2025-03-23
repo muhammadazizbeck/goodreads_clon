@@ -24,11 +24,14 @@ class Author(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 class BookAuthor(models.Model):
-    book = models.ForeignKey(Book,on_delete=models.CASCADE)
-    author = models.ForeignKey(Author,on_delete=models.Case)
+    book = models.ForeignKey(Book,on_delete=models.CASCADE,related_name='authors')
+    author = models.ForeignKey(Author,on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.book.title} written by {self.author.first_name} {self.author.last_name}"
+    
+    def full_name(self):
+        return f'{self.author.first_name} {self.author.last_name}'
     
 
 class BookReview(models.Model):

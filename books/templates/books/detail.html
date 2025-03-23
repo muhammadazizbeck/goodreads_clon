@@ -13,6 +13,16 @@
                     </div>
                     <div class="col-md-8">
                         <h2 class="mb-3">{{ book.title }}</h2>
+                        <span class="fst-italic">
+                            Authored by:
+                            {% for author in book.authors.all %}
+                                {% if forloop.last %}
+                                    {{author.full_name}}
+                                {% else %}
+                                    {{author.full_name}},
+                                {% endif %}
+                            {% endfor %}
+                        </span>
                         <p class="text-muted">📖 {{ book.description }}</p>
                         <p class="text-muted">ISBN: {{ book.isbn }}</p>
                         <a href="{% url 'books:list' %}" class="btn btn-outline-primary mt-3">⬅ Back to Books</a>
@@ -48,7 +58,13 @@
                  class="img-fluid rounded-circle" width="100" >
         </div>
         <div class="col-10">
-            <p><strong>{{ review.user.username }}</strong> gave it {{ review.stars }} ⭐</p>
+            <span><strong>{{ review.user.username }}</strong> gave it {{ review.stars }} ⭐</span>
+            <a href="{% url 'books:update-review' book.id review.id %}">
+                <i class="bi bi-pen"></i>
+            </a> 
+            <a href="#">
+                <i class="bi bi-trash-fill"></i>
+            </a>
             <p class="text-muted small">{{ review.created_at }}</p>
             <p>{{ review.comment }}</p>
         </div>

@@ -1,10 +1,11 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .models import Book,BookReview
 from django.urls import reverse
 from django.db.models import Q
 from django.core.paginator import Paginator
 from django.views import View
 from .forms import BookReviewForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
@@ -51,5 +52,19 @@ class AddReviewView(View):
                 'review_form':review_form
             }
             return render(request,'books/detail.html',context)
+        
+    
+class ReviewUpdateView(LoginRequiredMixin,View):
+    def get(self,request,book_id,review_id):
+        book = get_object_or_404(Book,id=book_id)
+        review = get_object_or_404(BookReview,id=review_id,book=book)
+        edit_form = BookReviewForm(instance=review)
+
+        context = {
+            'book':book,
+            'review':review,
+            'edit_form':edit_form
+        }
+        return render(request,'books/edit_review.html',context)
     
 
