@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from .models import Book,BookReview
 from django.urls import reverse
 from django.db.models import Q
+from django.contrib import messages
 from django.core.paginator import Paginator
 from django.views import View
 from .forms import BookReviewForm
@@ -66,5 +67,30 @@ class ReviewUpdateView(LoginRequiredMixin,View):
             'edit_form':edit_form
         }
         return render(request,'books/edit_review.html',context)
+    
+    def post(self,request,book_id,review_id):
+        book = get_object_or_404(Book,id=book_id)
+        review = get_object_or_404(BookReview,id=review_id,book=book)
+        edit_form = BookReviewForm(instance=review,data=request.POST)
+        if edit_form.is_valid():
+            edit_form.save()
+            messages.success(request,'You have successfully updated your review')
+            return redirect(reverse('books:detail',kwargs={'id':book.id}))
+        else:
+            context = {
+                'edit_form':edit_form
+            }
+            return render(request,'books/detail.html',context)
+        
+class DeleteReview(LoginRequiredMixin,View):
+    def get(self,request,book_id,review_id):
+        book = get_object_or_404(Book,id=book_id)
+        review = get_object_or_404(BookReview,id=review_id,book=book)
+        review.delete()
+        messages.success(request,'You have successfully deleted your review')
+        return redirect(reverse('books:detail',kwargs={'id':book.id}))
+        
+            
+
     
 

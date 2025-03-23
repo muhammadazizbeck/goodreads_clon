@@ -62,7 +62,7 @@
             <a href="{% url 'books:update-review' book.id review.id %}">
                 <i class="bi bi-pen"></i>
             </a> 
-            <a href="#">
+            <a href="{% url 'books:delete-review' book.id review.id %}">
                 <i class="bi bi-trash-fill"></i>
             </a>
             <p class="text-muted small">{{ review.created_at }}</p>
