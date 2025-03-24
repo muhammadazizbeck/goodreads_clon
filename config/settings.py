@@ -32,10 +32,12 @@ INSTALLED_APPS = [
     #internal
     'books',
     'users',
+    'api',
 
     #external
     "crispy_forms",
     "crispy_bootstrap5",
+    'rest_framework',
     
 ]
 

@@ -12,6 +12,7 @@ django-crispy-forms = "*"
 crispy-bootstrap5 = "*"
 celery = "*"
 redis = "*"
+djangorestframework = "*"
 
 [dev-packages]
 
