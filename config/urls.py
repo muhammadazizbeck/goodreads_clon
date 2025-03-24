@@ -10,6 +10,7 @@ urlpatterns = [
     path('allreview/',allreview_page,name='allreview'),
     path('users/',include('users.urls')),
     path('api/',include('api.urls')),
+    path('api-auth/',include('rest_framework.urls')),
     path('books/',include('books.urls'))
 ]
 
