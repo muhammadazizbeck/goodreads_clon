@@ -1,14 +1,14 @@
 
-django = "*"
-python-decouple = "*"
-pillow = "*"
-django-crispy-forms = "*"
-crispy-bootstrap5 = "*"
-celery = "*"
-redis = "*"
-djangorestframework = "*"
-psycopg2 = "*"
-psycopg2-binary = "*"
-gunicorn = "*"
-django-environ = "*"
-python_version = "3.11"
+django
+python-decouple 
+pillow 
+django-crispy-forms
+crispy-bootstrap5
+celery 
+redis
+djangorestframework 
+psycopg2 
+psycopg2-binary 
+gunicorn 
+django-environ 
+python_version 
