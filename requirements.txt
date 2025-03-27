@@ -1,4 +1,4 @@
-
+gunicorn
 django
 python-decouple 
 pillow 
@@ -11,4 +11,3 @@ psycopg2
 psycopg2-binary 
 gunicorn 
 django-environ 
-python_version 

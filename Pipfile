@@ -14,8 +14,8 @@ redis = "*"
 djangorestframework = "*"
 psycopg2 = "*"
 psycopg2-binary = "*"
-gunicorn = "*"
 django-environ = "*"
+gunicorn = "*"
 
 [dev-packages]
 
