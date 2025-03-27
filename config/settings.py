@@ -16,7 +16,7 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = config("DEBUG",default=False,cast=bool)
 
-ALLOWED_HOSTS = ['45.55.140.33']
+ALLOWED_HOSTS = ['*']
 
 
 
